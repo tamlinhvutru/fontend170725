@@ -1,0 +1,1 @@
+return token ? children : <Navigate to="/login" />;
