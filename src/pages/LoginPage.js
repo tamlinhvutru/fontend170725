@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Cập nhật đường dẫn
+import { useAuth } from '../context/AuthContext';
 import Container from '../components/layout/Container';
 import Form from '../components/form/Form';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import api from '../config/api';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -13,19 +14,19 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      const mockToken = 'mock-token-123';
-      if (username && password) {
-        login(mockToken);
-        navigate('/my-devices');
-      } else {
-        setError('Vui lòng nhập tên đăng nhập và mật khẩu.');
-      }
+    try {
+      const response = await api.post('/auth/login', { username, password });
+      const { token } = response.data;
+      login(token);
+      navigate('/my-devices');
+    } catch (err) {
+      setError('Đăng nhập thất bại. Vui lòng kiểm tra thông tin.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const fields = [

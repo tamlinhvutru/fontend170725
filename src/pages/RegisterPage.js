@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Cập nhật đường dẫn
+import { useAuth } from '../context/AuthContext';
 import Container from '../components/layout/Container';
 import Form from '../components/form/Form';
-import Button from '../components/common/Button'; // Thêm import Button
+import Button from '../components/common/Button';
+import api from '../config/api';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -13,18 +14,19 @@ const RegisterPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError('Mật khẩu và xác nhận mật khẩu không khớp.');
       return;
     }
-    const mockToken = 'mock-token-123';
-    if (username && password) {
-      login(mockToken);
+    try {
+      const response = await api.post('/auth/register', { username, password });
+      const { token } = response.data;
+      login(token);
       navigate('/devices');
-    } else {
-      setError('Vui lòng nhập tên đăng nhập và mật khẩu.');
+    } catch (err) {
+      setError('Đăng ký thất bại. Vui lòng thử lại.');
     }
   };
 

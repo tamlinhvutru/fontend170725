@@ -1,9 +1,12 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center">
-    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-  </div>
+  <motion.div
+    className="inline-block w-6 h-6 border-4 border-t-4 border-blue-500 rounded-full"
+    animate={{ rotate: 360 }}
+    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+  />
 );
 
 export default LoadingSpinner;

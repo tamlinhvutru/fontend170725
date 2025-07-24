@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext'; // Cập nhật đường dẫn
 import Container from '../components/layout/Container';
-import Card from '../components/card/card';
+import Card from '../components/card/Cardc';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const MyDevicesPage = () => {
