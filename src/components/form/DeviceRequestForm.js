@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import Button from './common/Button'; 
-import LoadingSpinner from './common/LoadingSpinner'; 
-import api from '../config/api';
+import Form from '../form/Form';
+import Button from '../common/Button';
+import api from '../../config/api';
+import LoadingSpinner from '../common/LoadingSpinner';
+
 
 
 const DeviceRequestForm = ({ deviceId, onClose }) => {

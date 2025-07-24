@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext'; // Cập nhật đường dẫn
+import { useAuth } from '../context/AuthContext';
 import Container from '../components/layout/Container';
 import Card from '../components/card/Cardc';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import api from '../config/api';
 
 const MyDevicesPage = () => {
   const [devices, setDevices] = useState([]);
@@ -10,18 +11,22 @@ const MyDevicesPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      const sampleDevices = [
-        { device_id: 1, name: 'Laptop Dell', status: 'assigned', type: 'laptop', serial_number: 'SN123' },
-        { device_id: 2, name: 'Monitor LG', status: 'assigned', type: 'monitor', serial_number: 'SN456' },
-      ];
-      setDevices(sampleDevices);
+    const fetchDevices = async () => {
+      const response = await api.get('/my-devices');
+      setDevices(response.data);
       setLoading(false);
-    }, 1000);
+    };
+    fetchDevices();
   }, []);
 
-  const handleReturn = (deviceName) => {
-    setMessage(`Đã gửi yêu cầu trả ${deviceName}.`);
+  const handleReturn = async (deviceId) => {
+    try {
+      await api.post('/returns', { deviceId });
+      setMessage('Đã gửi yêu cầu trả thành công.');
+      setDevices(devices.filter(d => d.device_id !== deviceId));
+    } catch (err) {
+      setMessage('Gửi yêu cầu thất bại.');
+    }
     setTimeout(() => setMessage(''), 3000);
   };
 
@@ -40,7 +45,7 @@ const MyDevicesPage = () => {
                 title={device.name}
                 status={device.status}
                 onRequest={() => {}}
-                onReturn={() => handleReturn(device.name)}
+                onReturn={() => handleReturn(device.device_id)}
               >
                 <p className="text-sm text-gray-500">Loại: {device.type}</p>
                 <p className="text-sm text-gray-500">Số serial: {device.serial_number}</p>

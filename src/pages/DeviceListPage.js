@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Container from '../components/layout/Container';
 import Card from '../components/card/Cardc';
 import Filter from '../components/filter/Filter';
-import DeviceRequestForm from '../components/DeviceRequestForm';
+import DeviceRequestForm from '../components/form/DeviceRequestForm';
 import api from '../config/api';
 
 const DeviceListPage = () => {
